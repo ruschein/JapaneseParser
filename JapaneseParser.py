@@ -2,10 +2,17 @@
 import sys
 
 
+def StripSentenceEnders(reversed_sentence, reversed_components):
+    sentence_ender_particles = ['か', 'ね', 'よ']
+    while reversed_sentence and reversed_sentence[0] in sentence_ender_particles:
+        reversed_components.append(reversed_sentence[0])
+        reversed_sentence = reversed_sentence[1:]
+
+        
 def ParseSentence(sentence):
     reversed_components = []
-    for char in reversed(sentence):
-        print(char)
+    reversed_sentence = sentence[::-1]
+    StripSentenceEnders(reversed_sentence, reversed_components)
     for component in reversed(reversed_components):
         print(component)
 
