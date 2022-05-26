@@ -4,7 +4,7 @@ import sys
 
 
 def StripSentenceEnders(reversed_sentence, reversed_components):
-    sentence_ender_particles = ['か', 'ね', 'よ', 'な']
+    sentence_ender_particles = ['か', 'ね', 'よ', 'な', 'の']
     while reversed_sentence and reversed_sentence[0] in sentence_ender_particles:
         reversed_components.append(reversed_sentence[0])
         reversed_sentence = reversed_sentence[1:]
