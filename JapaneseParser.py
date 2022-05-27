@@ -17,8 +17,8 @@ def StripIfEndsWith(reversed_sentence, possible_suffix):
 
 # @return (the shortened reversed_sentence, the stripped copula or False if there wasn't one)
 def StripTrailingCopula(reversed_sentence):
-    copula_forms = ['だ', 'だった', 'です', 'でした']
-    for copula_form in copula_forms:
+    COPULA_FORMS = ['だ', 'だった', 'です', 'でした']
+    for copula_form in COPULA_FORMS:
         reversed_sentence, found_copula_form = StripIfEndsWith(reversed_sentence, copula_form)
         if found_copula_form:
             return reversed_sentence, found_copula_form
@@ -27,10 +27,10 @@ def StripTrailingCopula(reversed_sentence):
 
 # @return (reversed_sentence, reversed_components)
 def StripSentenceEnders(reversed_sentence, reversed_components):
-    sentence_ender_particles = ['か', 'ね', 'よ', 'な', 'の']
+    SENTENCE_ENDER_PARTICLES = ['か', 'ね', 'よ', 'な', 'の']
     while True:
         matched_at_least_one = False
-        for sentence_ender_particle in sentence_ender_particles:
+        for sentence_ender_particle in SENTENCE_ENDER_PARTICLES:
             reversed_sentence, stripped_ender = StripIfEndsWith(reversed_sentence, sentence_ender_particle)
             if stripped_ender:
                 reversed_components.append(stripped_ender)
@@ -42,8 +42,8 @@ def StripSentenceEnders(reversed_sentence, reversed_components):
 
 # @return (the shortened reversed_sentence, the stripped punctuation mark or False if there wasn't one)
 def StripPunctuationMark(reversed_sentence):
-    punctuation_marks = ['。', '？', '！']
-    for punctuation_mark in punctuation_marks:
+    PUNCTUATION_MARKS = ['。', '？', '！']
+    for punctuation_mark in PUNCTUATION_MARKS:
         reversed_sentence, found_punctuation_mark = StripIfEndsWith(reversed_sentence, punctuation_mark)
         if found_punctuation_mark:
             return reversed_sentence, found_punctuation_mark
