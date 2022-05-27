@@ -39,23 +39,43 @@ def StripSentenceEnders(reversed_sentence, reversed_components):
             break
     return reversed_sentence, reversed_components
 
-        
+
+# @return (the shortened reversed_sentence, the stripped punctuation mark or False if there wasn't one)
+def StripPunctuationMark(reversed_sentence):
+    punctuation_marks = ['。', '？', '！']
+    for punctuation_mark in punctuation_marks:
+        reversed_sentence, found_punctuation_mark = StripIfEndsWith(reversed_sentence, punctuation_mark)
+        if found_punctuation_mark:
+            return reversed_sentence, found_punctuation_mark
+    return reversed_sentence, False
+
+
+def DisplayResult(original_sentence, reversed_components):
+    print(original_sentence)
+    for component in reversed(reversed_components):
+        print("\t" + component)
+    
 def ParseSentence(sentence):
     reversed_components = []
     reversed_sentence = sentence[::-1]
+    reversed_sentence, punctuation_mark = StripPunctuationMark(reversed_sentence)
+    if punctuation_mark:
+        reversed_components.append(punctuation_mark)
     reversed_sentence, reversed_components = StripSentenceEnders(reversed_sentence, reversed_components)
     reversed_sentence, copula_form = StripTrailingCopula(reversed_sentence)
     if copula_form:
         reversed_components.append(copula_form)
-    for component in reversed(reversed_components):
-        print(component)
+    return reversed_components
 
         
 def Main():
     if len(sys.argv) != 2:
         print('Usage: ' + sys.argv[0] + ' japanese_sentence')
         exit(1)
-    ParseSentence(sys.argv[1])
+
+    original_sentence = sys.argv[1]
+    reversed_componenst = ParseSentence(original_sentence)
+    DisplayResult(original_sentence, reversed_componenst)
 
 
 Main()
