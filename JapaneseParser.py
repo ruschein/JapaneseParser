@@ -50,15 +50,15 @@ def StripPunctuationMark(reversed_sentence):
     return reversed_sentence, False
 
 
-def DisplayResult(original_sentence, reversed_components):
-    print(original_sentence)
+def DisplayResult(ORIGINAL_SENTENCE, reversed_components):
+    print(ORIGINAL_SENTENCE)
     for component in reversed(reversed_components):
         print("\t" + component)
 
         
-def ParseSentence(sentence):
+def ParseSentence(SENTENCE):
     reversed_components = []
-    reversed_sentence = sentence[::-1]
+    reversed_sentence = SENTENCE[::-1]
     reversed_sentence, punctuation_mark = StripPunctuationMark(reversed_sentence)
     if punctuation_mark:
         reversed_components.append(punctuation_mark)
@@ -74,9 +74,9 @@ def Main():
         print('Usage: ' + sys.argv[0] + ' japanese_sentence')
         exit(1)
 
-    original_sentence = sys.argv[1]
-    reversed_componenst = ParseSentence(original_sentence)
-    DisplayResult(original_sentence, reversed_componenst)
+    ORIGINAL_SENTENCE = sys.argv[1]
+    reversed_componenst = ParseSentence(ORIGINAL_SENTENCE)
+    DisplayResult(ORIGINAL_SENTENCE, reversed_componenst)
 
 
 Main()
