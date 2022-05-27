@@ -34,6 +34,20 @@ def ParseSentence(sentence):
     for component in reversed(reversed_components):
         print(component)
 
+def ParseSentenceEs(sentence):
+    """ Parse from start to end and capture components before
+        particles. Ignore の for now."""
+    particles = ['が', 'ね', 'よ', 'な', 'を', 'に','は'] #'の', 
+    pos = 0
+    start = 0
+    components = []
+    for ch in sentence:
+        if ch in particles:
+            components.append([ch, sentence[start:pos]])
+            start = pos+1
+        pos += 1
+    components.append(['。', sentence[start:-2]]) # Drop 。 and newline.
+    return components
         
 def Main():
     if len(sys.argv) != 2:
@@ -41,5 +55,5 @@ def Main():
         exit(1)
     ParseSentence(sys.argv[1])
 
-
-Main()
+if __name__ == "__main__":
+    Main()
