@@ -17,7 +17,7 @@ def StripIfEndsWith(reversed_sentence, possible_suffix):
 
 # @return (the shortened reversed_sentence, the stripped copula or False if there wasn't one)
 def StripTrailingCopula(reversed_sentence):
-    COPULA_FORMS = ['だ', 'だった', 'です', 'でした']
+    COPULA_FORMS = ['だ', 'だった', 'です', 'でした', 'である', 'であります', 'でござる', 'でございます']
     for copula_form in COPULA_FORMS:
         reversed_sentence, found_copula_form = StripIfEndsWith(reversed_sentence, copula_form)
         if found_copula_form:
