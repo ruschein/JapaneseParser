@@ -54,7 +54,8 @@ def DisplayResult(original_sentence, reversed_components):
     print(original_sentence)
     for component in reversed(reversed_components):
         print("\t" + component)
-    
+
+        
 def ParseSentence(sentence):
     reversed_components = []
     reversed_sentence = sentence[::-1]
