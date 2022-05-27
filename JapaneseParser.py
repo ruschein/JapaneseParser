@@ -7,30 +7,46 @@ import sys
 # with "possible_suffix".
 # @return ("reversed_sentence","possible_suffix") if "reversed_sentence" ends w/ "possible_suffix" o/w ("reversed_sentence",False).
 def StripIfEndsWith(reversed_sentence, possible_suffix):
+    reversed_possible_suffix = possible_suffix[::-1]
     if len(reversed_sentence) >= len(possible_suffix) \
-       and reversed_sentence[:len(possible_suffix)] == possible_suffix:
+       and reversed_sentence[:len(possible_suffix)] == reversed_possible_suffix:
         reversed_sentence = reversed_sentence[len(possible_suffix):]
         return reversed_sentence, possible_suffix
     return reversed_sentence, False
 
 
+# @return (the shortened reversed_sentence, the stripped copula or False if there wasn't one)
+def StripTrailingCopula(reversed_sentence):
+    copula_forms = ['だ', 'だった', 'です', 'でした']
+    for copula_form in copula_forms:
+        reversed_sentence, found_copula_form = StripIfEndsWith(reversed_sentence, copula_form)
+        if found_copula_form:
+            return reversed_sentence, found_copula_form
+    return reversed_sentence, False
+
+
+# @return (reversed_sentence, reversed_components)
 def StripSentenceEnders(reversed_sentence, reversed_components):
     sentence_ender_particles = ['か', 'ね', 'よ', 'な', 'の']
     while True:
         matched_at_least_one = False
         for sentence_ender_particle in sentence_ender_particles:
-            reversed_sentence, stripped_ender = StripIfEndsWith(reversed_sentence, sentence_ender_particle[::-1])
+            reversed_sentence, stripped_ender = StripIfEndsWith(reversed_sentence, sentence_ender_particle)
             if stripped_ender:
                 reversed_components.append(stripped_ender)
                 matched_at_least_one = True
         if not matched_at_least_one:
             break
+    return reversed_sentence, reversed_components
 
         
 def ParseSentence(sentence):
     reversed_components = []
     reversed_sentence = sentence[::-1]
-    StripSentenceEnders(reversed_sentence, reversed_components)
+    reversed_sentence, reversed_components = StripSentenceEnders(reversed_sentence, reversed_components)
+    reversed_sentence, copula_form = StripTrailingCopula(reversed_sentence)
+    if copula_form:
+        reversed_components.append(copula_form)
     for component in reversed(reversed_components):
         print(component)
 
