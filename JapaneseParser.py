@@ -3,6 +3,10 @@
 import sys
 
 
+LOGICAL_PARTICLES = ['が', 'を', 'へ', 'に', 'で']
+NONLOGICAL_PARTICLES = ['は', 'の']
+
+
 # Strips "possible_suffix" from "reversed_sentence", if "reversed_sentence" ends
 # with "possible_suffix".
 # @return ("reversed_sentence","possible_suffix") if "reversed_sentence" ends w/ "possible_suffix" o/w ("reversed_sentence",False).
