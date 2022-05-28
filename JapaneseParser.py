@@ -19,6 +19,31 @@ def IsKanji(CHAR) -> bool:
     return u'\u4E00' <= CHAR <= u'\u9FAF'
 
 
+# Attempts to extract a verb, adjective or noun from the reversed_sentence.
+# If successful, we return the shortened reversed_sentence and whatever we extracted
+# o/w we return the original reversed_sentence and False.
+def ExtracVerbAdjectiveOrNoun(reversed_sentence):
+    if not reversed_sentence:
+        return reversed_sentence, False
+    if IsKatakana(reversed_sentence[0]):
+        # Assume we have a word written w/ Katakana only!
+        katakana_word = ''
+        while reversed_sentence and IsKatakana(reversed_sentence[0]):
+            katakana_word += reversed_sentence[0]
+            reversed_sentence = reversed_sentence[1:]
+        return reversed_sentence, katakana_word[::-1]
+    if not IsHiragana(reversed_sentence[0]) and not IsKanji(reversed_sentence[0]):
+        sys.exit("Non-Japanese character in input: " + reversed_sentence[0] + "!")
+    verb_or_noun = ''
+    while reversed_sentence and IsHiragana(reversed_sentence[0]):
+        verb_or_noun += reversed_sentence[0]
+        reversed_sentence = reversed_sentence[1:]
+    while reversed_sentence and IsKanji(reversed_sentence[0]):
+        verb_or_noun += reversed_sentence[0]
+        reversed_sentence = reversed_sentence[1:]
+    return reversed_sentence, verb_or_noun[::-1]
+
+
 # Strips "POSSIBLE_SUFFIX" from "reversed_sentence", if "reversed_sentence" ends
 # with "POSSIBLE_SUFFIX".
 # @return ("reversed_sentence","POSSIBLE_SUFFIX") if "reversed_sentence" ends w/ "POSSIBLE_SUFFIX" o/w ("reversed_sentence",False).
@@ -81,6 +106,9 @@ def ParseSentence(SENTENCE):
     reversed_sentence, copula_form = StripTrailingCopula(reversed_sentence)
     if copula_form:
         reversed_components.append(copula_form)
+    reversed_sentence, verb_adjective_or_noun = ExtracVerbAdjectiveOrNoun(reversed_sentence)
+    if verb_adjective_or_noun:
+        reversed_components.append(verb_adjective_or_noun)
     return reversed_components
 
         
