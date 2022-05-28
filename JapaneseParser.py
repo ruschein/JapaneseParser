@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
 
@@ -115,7 +115,7 @@ def ParseSentence(SENTENCE):
 def Main():
     if len(sys.argv) != 2:
         print('Usage: ' + sys.argv[0] + ' japanese_sentence')
-        exit(1)
+        sys.exit(1)
 
     ORIGINAL_SENTENCE = sys.argv[1]
     reversed_componenst = ParseSentence(ORIGINAL_SENTENCE)
