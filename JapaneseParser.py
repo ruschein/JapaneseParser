@@ -7,15 +7,26 @@ LOGICAL_PARTICLES = ['が', 'を', 'へ', 'に', 'で']
 NONLOGICAL_PARTICLES = ['は', 'の']
 
 
-# Strips "possible_suffix" from "reversed_sentence", if "reversed_sentence" ends
-# with "possible_suffix".
-# @return ("reversed_sentence","possible_suffix") if "reversed_sentence" ends w/ "possible_suffix" o/w ("reversed_sentence",False).
-def StripIfEndsWith(reversed_sentence, possible_suffix):
-    reversed_possible_suffix = possible_suffix[::-1]
-    if len(reversed_sentence) >= len(possible_suffix) \
-       and reversed_sentence[:len(possible_suffix)] == reversed_possible_suffix:
-        reversed_sentence = reversed_sentence[len(possible_suffix):]
-        return reversed_sentence, possible_suffix
+def IsHiragana(CHAR) -> bool:
+    return u'\u3040' <= CHAR <= u'\u309F'
+
+
+def IsKatakana(CHAR) -> bool:
+    return u'\u30A0' <= CHAR <= u'\u30FF'
+
+
+def IsKanji(CHAR) -> bool:
+    return u'\u4E00' <= CHAR <= u'\u9FAF'
+
+
+# Strips "POSSIBLE_SUFFIX" from "reversed_sentence", if "reversed_sentence" ends
+# with "POSSIBLE_SUFFIX".
+# @return ("reversed_sentence","POSSIBLE_SUFFIX") if "reversed_sentence" ends w/ "POSSIBLE_SUFFIX" o/w ("reversed_sentence",False).
+def StripIfEndsWith(reversed_sentence, POSSIBLE_SUFFIX):
+    reversed_possible_suffix = POSSIBLE_SUFFIX[::-1]
+    if len(reversed_sentence) >= len(POSSIBLE_SUFFIX) \
+       and reversed_sentence[:len(POSSIBLE_SUFFIX)] == reversed_possible_suffix:
+        return reversed_sentence[len(POSSIBLE_SUFFIX):], POSSIBLE_SUFFIX
     return reversed_sentence, False
 
 
