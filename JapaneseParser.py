@@ -55,7 +55,35 @@ def StripIfEndsWith(reversed_sentence, POSSIBLE_SUFFIX):
     return reversed_sentence, False
 
 
-# @return (the shortened reversed_sentence, the stripped copula or False if there wasn't one)
+# This should handle one or two particles and what Cure Dolly calls a "car".
+# @return (reversed_sentence, car, particles)
+def ParseSentenceComponent(reversed_sentence):
+    if not reversed_sentence:
+        sys.exit("ParseSentenceComponent requires non-empty reversed_sentences!");
+    
+    # 1. Expect and strip particles:
+    particles = ''
+    if reversed_sentence and reversed_sentence[0] == 'と': # We're dealing w/ a quotation!
+        particles += 'と'
+        reversed_sentence = reversed_sentence[1:]
+    elif reversed_sentence[0] in LOGICAL_PARTICLES:
+        particles += reversed_sentence[0]
+        reversed_sentence = reversed_sentence[1:]
+        if reversed_sentence and reversed_sentence[0] in NONLOGICAL_PARTICLES:
+            particles += reversed_sentence[0]
+            reversed_sentence = reversed_sentence[1:]
+    elif reversed_sentence[0] in NONLOGICAL_PARTICLES:
+        particles += reversed_sentence[0]
+        reversed_sentence = reversed_sentence[1:]
+
+    reversed_sentence, car = ExtracVerbAdjectiveOrNoun(reversed_sentence)
+    if not car:
+        sys.exit('Failed to parse a "car"!')
+
+    return reversed_sentence, car, particles
+
+        
+# @Return (the shortened reversed_sentence, the stripped copula or False if there wasn't one)
 def StripTrailingCopula(reversed_sentence):
     COPULA_FORMS = ['だ', 'だった', 'です', 'でした', 'である', 'であります', 'でござる', 'でございます']
     for copula_form in COPULA_FORMS:
@@ -109,6 +137,14 @@ def ParseSentence(SENTENCE):
     reversed_sentence, verb_adjective_or_noun = ExtracVerbAdjectiveOrNoun(reversed_sentence)
     if verb_adjective_or_noun:
         reversed_components.append(verb_adjective_or_noun)
+
+    while reversed_sentence:
+        reversed_sentence, car, particles = ParseSentenceComponent(reversed_sentence)
+        if particles:
+            reversed_components.append(particles)
+        if car:
+            reversed_components.append(car)
+            
     return reversed_components
 
         
