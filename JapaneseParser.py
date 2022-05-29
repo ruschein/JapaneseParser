@@ -122,4 +122,5 @@ def Main():
     DisplayResult(ORIGINAL_SENTENCE, reversed_componenst)
 
 
-Main()
+if __name__ == "__main__":
+    Main()
