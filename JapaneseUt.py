@@ -8,6 +8,20 @@ Usage:
 import sys
 import JapaneseEs
 
+dolly = ( # cd = Cure Dolly
+    ("私がケーキを食べる。",
+    "I eat cake",
+    "cd#3 WA particle"
+    ),
+    ("犬が食べる。",
+     "The dog will eat",
+    "cd#3 WA particle"
+    ),(
+    "さくらが歩く。",
+    "Sakura will walk",
+    "cd#3 WA particle"
+     )
+     )
 sentences = ( # https://www.wanikani.com/vocabulary/後私
     ("その後私はそこを出るんだけど鞄を忘れてきたことに気付くんだ。",
      "After that I leave there but realize that I have forgotten my bag",
@@ -33,6 +47,21 @@ sentences = ( # https://www.wanikani.com/vocabulary/後私
      [['。', 'いやー、もしかしたらすっぽんぽんだったかもッ']]
     ))
 
+def ParseList(list):
+    """ Split sentence by particles in 'logicals'.
+        Then find Wanikani items to highlight. """
+    for raw in JapaneseEs.RawList(list):
+        print(raw)
+    print()
+    for sentence in list:
+        print("%s" % (sentence[0]))
+        logicals = JapaneseEs.ParseSentence(sentence[0])
+        print(logicals)
+        wanikanis = JapaneseEs.ParseLogicals(logicals)
+        print (wanikanis)
+        print()
+        
+
 def ParseFile(input):
     for line in input.readlines():
         print("%s" % (line[:-1]))
@@ -48,9 +77,12 @@ def ParseSentences(input):
         print("-")
 
 if __name__ == "__main__":
+    mode = "dolly"
     if len(sys.argv) != 2:
         print(__doc__)
         sys.exit(1)
+    elif (mode =="dolly"):
+        ParseList(dolly)
     else:
         print("Input file: %s" % sys.argv[1])
         ParseFile(open(sys.argv[1], 'r', encoding='UTF-8'))
