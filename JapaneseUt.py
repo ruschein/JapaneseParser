@@ -8,11 +8,14 @@ Usage:
 import sys
 import JapaneseEs
 
+mode = None
+
 dolly = ( # cd = Cure Dolly
     ("私がケーキを食べる。",
     "I eat cake",
     "cd#3 WA particle"
     ),
+    # https://www.wanikani.com/vocabulary/食べる
     ("犬が食べる。",
      "The dog will eat",
     "cd#3 WA particle"
@@ -56,9 +59,11 @@ def ParseList(list):
     for sentence in list:
         print("%s" % (sentence[0]))
         logicals = JapaneseEs.ParseSentence(sentence[0])
-        print(logicals)
+        #print(logicals)
         wanikanis = JapaneseEs.ParseLogicals(logicals)
-        print (wanikanis)
+        #print (wanikanis)
+        wkdump = JapaneseEs.WkDump(wanikanis)
+        print(wkdump)
         print()
         
 
@@ -85,5 +90,27 @@ if __name__ == "__main__":
         ParseList(dolly)
     else:
         print("Input file: %s" % sys.argv[1])
-        ParseFile(open(sys.argv[1], 'r', encoding='UTF-8'))
+        #ParseFile(open(sys.argv[1], 'r', encoding='UTF-8'))
         #ParseSentences(sentences)
+        state = 0
+        vocabText = open("../../wkdata/vocab.txt", 'r', encoding='UTF-8')
+        vocabs = {}
+        for line in vocabText.readlines():
+            if (state == 0) and (line.find('<span class="character" lang="ja">') > -1):
+                state += 1
+            elif (state == 1):
+                vocab = line.strip()
+                state += 1
+            elif (state == 2) and (line.find('<li lang="ja">') > -1):
+                state +=1
+            elif (state == 3):
+                reading = line.strip()
+                state += 1
+            elif (state == 4) and (line.find('<li>') > -1):
+                splits = line.split('li')
+                vocabs[vocab] = [reading, splits[1][1:-2]]
+                state = 0
+        for val in vocabs.items():
+            print(val)
+            
+                

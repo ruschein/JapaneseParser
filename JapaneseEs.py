@@ -60,17 +60,23 @@ def ParseLogicals(logicals):
     for (particle, text) in logicals:
         if (particle == '。') and (text[-1] in verbEndings):
             # Assume we got a verb in dictionary form.
-            wkEntries.append([particle, "wk(%s)" % text])
+            wkEntries.append([particle, "(%s)" % text])
         else:
             # Just hunt for kanji.
             wkEntry = ""
             for ch in text:
                 if jp.IsKanji(ch):
-                    wkEntry += "wk(%s)" % ch
+                    wkEntry += "(%s)" % ch
                 else:
                     wkEntry += ch
             wkEntries.append([particle, wkEntry])
     return wkEntries
+
+def WkDump(wkEntries):
+    """ Dump logical parser taking kanji and recognise verbs
+        in dictionary form. """
+    wkDump0 = [ l[1]+l[0] for l in wkEntries]
+    return "".join(wkDump0)
 
 def RawList(list):
     """ Raw japanese string."""
