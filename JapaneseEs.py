@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import JapaneseParser as jp
-
+import wkData as wk
 
 def ParseSentence(sentence):
     """ Parse from start to end and capture components before
@@ -58,17 +58,38 @@ def ParseLogicals(logicals):
     verbEndings = ['う','つ','る','ぬ','ぶ','む','く','ぐ','す']
     wkEntries = []
     for (particle, text) in logicals:
-        if (particle == '。') and (text[-1] in verbEndings):
+        if (particle == '。'):
+            verb = ''
+            for ch in text:
+                verb += ch
+                if ch in verbEndings:
+                    break
             # Assume we got a verb in dictionary form.
-            wkEntries.append([particle, "(%s)" % text])
+            wkEntries.append([particle, "(%s)" % verb])
         else:
             # Just hunt for kanji.
-            wkEntry = ""
+            kanji = "("
+            kana = ""
+            adjective = "("
+            verb = "("
+            kanjiMode = False
             for ch in text:
                 if jp.IsKanji(ch):
-                    wkEntry += "(%s)" % ch
+                    print("kanji="+ch)
+                    kanji += ch
+                    kanjiMode = True
                 else:
-                    wkEntry += ch
+                    if kanjiMode:
+                        kanji += ")" # For only being kanjis.
+                        kanjiMode = False
+                    kana += ch
+                    adjective += ch
+                    verb += ch
+            if (kanji != "("):
+                if kanjiMode: kanji += ")"
+                wkEntry = kanji + kana
+            else:
+                wkEntry = kana
             wkEntries.append([particle, wkEntry])
     return wkEntries
 

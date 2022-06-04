@@ -13,18 +13,99 @@ mode = None
 dolly = ( # cd = Cure Dolly
     ("私がケーキを食べる。",
     "I eat cake",
-    "cd#3 WA particle"
+    "cd#3 WA particle",
+    "(私)がケーキを(食べる)。"
     ),
     # https://www.wanikani.com/vocabulary/食べる
     ("犬が食べる。",
      "The dog will eat",
-    "cd#3 WA particle"
+    "cd#3 WA particle",
+    "(犬)が(食べる)。"
     ),(
     "さくらが歩く。",
     "Sakura will walk",
-    "cd#3 WA particle"
-     )
-     )
+    "cd#3 WA particle",
+    "さくらが(歩く)。"
+    ),(
+       "犬が食べていりる",
+       "The dog is eating.",
+       "cd#4 te."
+    ),(
+       "明日ケーキを食べる。",
+       "Tomorrow I will eat cake",
+       "ch#4 relative time."
+    ),( # Tae Kim
+       "友達は親切。",
+       "Friend is kind.",
+       "tk Adjectives and particles.",
+       ""
+    ),( # Tae Kim
+       "友達は親切な人だ。",
+       "Friend is kind person.",
+       "tk Adjectives and particles.",
+       ""
+    ),( # Tae Kim: Bob and fish.
+       "ボブは魚が好きだ。",
+       "Bob likes fish.",
+       "Pesent.",
+       ""
+    ),( # Tae Kim: Bob and fish.
+       "ボブは魚が好きじゃない。",
+       "Bob does not like fish.",
+       "Present,negative.",
+       ""
+    ),( # Tae Kim: Bob and fish.
+       "ボブは魚が好きだった。",
+       "Bob liked fish.",
+       "Past.",
+       ""
+    ),( # Tae Kim: Bob and fish.
+       "ボブは魚が好きじゃなかった。",
+       "Bob did not like fish.",
+       "Past,negative",
+       ""
+    ),( # Tae Kim: Person,fish.
+       "魚が好きな人。",
+       "Person that likes fish.",
+       "",
+       ""
+    ),( # Tae Kim: Person,fish.
+       "魚が好きじゃない人。",
+       "Person that does not like fish.",
+       "",
+       ""
+    ),( # Tae Kim: Person,fish.
+       "魚が好きだった人。",
+       "Person that liked fish.",
+       "",
+       ""
+    ),( # Tae Kim: Person,fish.
+       "魚が好きじゃなかった人。",
+       "Person that did not like fish.",
+       "",
+       ""
+    ),( # Tae Kim: People, fish.
+       "人は魚が好きだ",
+       "People like fish.",
+       "",
+       ""
+    ),( # Tae Kim: Descriptive noun clause == single noun.
+       "魚が好きじゃない人は、肉が好きだ。",
+       "Person who does not like fish like meat.",
+       "",
+       ""
+    ),( # Tae Kim: Descriptive noun clause == single noun.
+       "魚が好きな人は、野菜も好きだ。",
+       "Person who likes fish also likes vegetables.",
+       "",
+       ""
+    ),( # Tae Kim
+       "",
+       "",
+       "",
+       ""
+    ))
+
 sentences = ( # https://www.wanikani.com/vocabulary/後私
     ("その後私はそこを出るんだけど鞄を忘れてきたことに気付くんだ。",
      "After that I leave there but realize that I have forgotten my bag",
@@ -94,7 +175,10 @@ if __name__ == "__main__":
         #ParseSentences(sentences)
         state = 0
         vocabText = open("../../wkdata/vocab.txt", 'r', encoding='UTF-8')
-        vocabs = {}
+        vocabPy = open("wkData.py", 'w', encoding='UTF-8')
+        vocabPy.write("# -*- coding: utf-8 -*-\n")
+        vocabPy.write("vocabs = { # -*- coding: utf-8 -*-\n")
+        #vocabs = {}
         for line in vocabText.readlines():
             if (state == 0) and (line.find('<span class="character" lang="ja">') > -1):
                 state += 1
@@ -108,9 +192,10 @@ if __name__ == "__main__":
                 state += 1
             elif (state == 4) and (line.find('<li>') > -1):
                 splits = line.split('li')
-                vocabs[vocab] = [reading, splits[1][1:-2]]
+                #vocabs[vocab] = [reading, splits[1][1:-2]]
+                vocabPy.write("    '%s': %s,\n" % (vocab, str([reading, splits[1][1:-2]])))
                 state = 0
-        for val in vocabs.items():
-            print(val)
-            
+            # for val in vocabs.items(): print(val)
+        vocabPy.write("}\n")
+        vocabPy.close()
                 
