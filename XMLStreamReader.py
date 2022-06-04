@@ -46,16 +46,17 @@ class XMLStreamReader():
             sys.exit("%s called for an event of type: %s" % (method, self.event))
     
     def getLocalName(self):
-        self.checkStartElement("getLocalName")
+        if not self.isStartElement() and not self.isEndElement():
+            sys.exit("getLocalName called for an event of type: %s" % self.event)
         return self.node.localName
 
     def getAttributeCount(self):
         self.checkStartElement("getAttributeCount")
         return self.node.attributes.length
 
-    def getAttributeLocalName(self,i):
+    def getAttributeLocalName(self, index):
         self.checkStartElement("getAttributeLocalName")
-        return self.node.attributes.item(i).localName
+        return self.node.attributes.item(index).localName
 
     def getAttributeValue(self, index):
         self.checkStartElement("getAttributeValue")

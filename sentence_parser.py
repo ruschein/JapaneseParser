@@ -59,8 +59,8 @@ def ParseSentences(xml_stream_reader: XMLStreamReader):
        and xml_stream_reader.getLocalName() == "parts":
       break
   sentence_parts = []
+  xml_stream_reader.next()
   while not xml_stream_reader.isEndDocument():
-    xml_stream_reader.next()
     if xml_stream_reader.isEndElement() \
        and xml_stream_reader.getLocalName() == "parts":
       break
@@ -74,6 +74,8 @@ def ParseSentences(xml_stream_reader: XMLStreamReader):
         sys.exit("expected \"characters\" after the \"part\" opening tag!")
       part_characters = xml_stream_reader.getText()
       sentence_parts.append((part_type, part_characters))
+    xml_stream_reader.next()
+
   return (japanese_sentence, english_sentence, sentence_parts)
 
 
