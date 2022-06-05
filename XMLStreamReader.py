@@ -14,7 +14,11 @@ class XMLStreamReader():
     # get next token 
     def next(self):
         if self.look_ahead == None:
-            (self.event, self.node) = self.events.getEvent()
+            event = self.events.getEvent()
+            if event is None:
+                (self.event, self.node) = (pulldom.END_DOCUMENT, None)
+            else:
+                (self.event, self.node) = event
         else:
             (self.event, self.node) = self.look_ahead
             self.look_ahead = None
