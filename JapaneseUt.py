@@ -27,13 +27,15 @@ dolly = ( # cd = Cure Dolly
     "cd#3 WA particle",
     "さくらが(歩く)。"
     ),(
-       "犬が食べていりる",
-       "The dog is eating.",
-       "cd#4 te."
+    "犬が食べている",
+    "The dog is eating.",
+    "cd#4 te.",
+    "(犬)が(食べる)ている",
     ),(
-       "明日ケーキを食べる。",
-       "Tomorrow I will eat cake",
-       "ch#4 relative time."
+    "明日ケーキを食べる。",
+    "Tomorrow I will eat cake",
+    "ch#4 relative time.",
+    "(明日)ケーキを(食べる)。"
     ),( # Tae Kim
        "友達は親切。",
        "Friend is kind.",
@@ -131,20 +133,43 @@ sentences = ( # https://www.wanikani.com/vocabulary/後私
      [['。', 'いやー、もしかしたらすっぽんぽんだったかもッ']]
     ))
 
+if 0:
+    W  = '\033[0m'  # white (normal)
+    R  = '\033[31m' # red
+    G  = '\033[32m' # green
+    O  = '\033[33m' # orange
+    B  = '\033[34m' # blue
+    P  = '\033[35m' # purple
+else:
+    W  = ''
+    R  = ''
+    G  = ''
+    O  = ''
+    B  = ''
+    P  = ''
+
 def ParseList(list):
     """ Split sentence by particles in 'logicals'.
         Then find Wanikani items to highlight. """
     for raw in JapaneseEs.RawList(list):
-        print(raw)
+        if (raw != ""):
+            print(raw)
     print()
     for sentence in list:
-        print("%s" % (sentence[0]))
-        logicals = JapaneseEs.ParseSentence(sentence[0])
-        #print(logicals)
-        wanikanis = JapaneseEs.ParseLogicals(logicals)
-        #print (wanikanis)
-        wkdump = JapaneseEs.WkDump(wanikanis)
-        print(wkdump)
+        if (sentence[0] != ""):
+            print("%s" % (sentence[0]))
+            logicals = JapaneseEs.ParseSentence(sentence[0])
+            print(logicals)
+            wanikanis = JapaneseEs.ParseLogicals(logicals)
+            #print (wanikanis)
+            wkdump = JapaneseEs.WkDump(wanikanis)
+            if (sentence[3] == ""):
+                print("= %s%s%s" % (G, wkdump, W))
+            elif (sentence[3] == wkdump):
+                print("+ %s%s%s" % (G, wkdump, W))
+            else:
+                print("- %s%s%s" % (B, wkdump, W))
+                print("+ %s%s%s" % (G, sentence[3], W))
         print()
         
 

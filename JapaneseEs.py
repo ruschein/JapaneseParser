@@ -75,7 +75,7 @@ def ParseLogicals(logicals):
             kanjiMode = False
             for ch in text:
                 if jp.IsKanji(ch):
-                    print("kanji="+ch)
+                    #print("kanji="+ch)
                     kanji += ch
                     kanjiMode = True
                 else:
@@ -93,6 +93,30 @@ def ParseLogicals(logicals):
             wkEntries.append([particle, wkEntry])
     return wkEntries
 
+### Start Convert to JS.
+def isKanji(ch):
+    return u'\u4E00' <= ch <= u'\u9FAF'
+
+def matchVocab(text):
+    """[日,本,人] = matchVocab("さくらは日本人です。")
+        """
+    vocabs = [ch for ch in text if isKanji(ch)]
+    return vocabs
+
+def splitVocab(text, matches):
+    """ [さくらは,",",です] = splitVocab("さくらは日本人です。", [日,本,人])
+        """
+    split = []
+    pos = 0
+    for vocab in matches:
+        pos = text.find(vocab)
+        split += [text[:pos]]
+        text = text[pos+len(vocab):]
+    # Get tail.
+    split += [text]
+    return split
+### End JS
+
 def WkDump(wkEntries):
     """ Dump logical parser taking kanji and recognise verbs
         in dictionary form. """
@@ -101,6 +125,13 @@ def WkDump(wkEntries):
 
 def RawList(list):
     """ Raw japanese string."""
+    for entry in list:
+        print(entry[0])
+        vocabs = matchVocab(entry[0])
+        print("vocabs=%s" % vocabs)
+        if (vocabs != []):
+            splits = splitVocab(entry[0], vocabs)
+            print("splits=%s" %splits)
     return [entry[0] for entry in list]
 
 if __name__ == "__main__":
