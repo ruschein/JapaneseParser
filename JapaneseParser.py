@@ -7,6 +7,7 @@ LOGICAL_PARTICLES = ['が', 'を', 'へ', 'に', 'で']
 NONLOGICAL_PARTICLES = ['は', 'の']
 POSSIBLE_ADJECTIVE_ENDINGS = ['い']
 VERB_INFINITIVE_ENDINGS = ['う', 'く', 'す', 'つ', 'ぬ', 'ぶ', 'む', 'る']
+TE_ENDINGS = ['って', 'んで', 'いて', 'いで', 'して']
 
 
 def IsHiragana(CHAR) -> bool:
