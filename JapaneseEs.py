@@ -94,14 +94,36 @@ def ParseLogicals(logicals):
     return wkEntries
 
 ### Start Convert to JS.
+# https://extendsclass.com/python-to-javascript.html
+
+
+vocabs = { # -*- coding: utf-8 -*-
+    '日本': ['にほん', 'Japan'],
+    '食べる': ['たべる', 'To Eat'],
+    '人': ['ひと', 'Person'],
+    }
+
 def isKanji(ch):
     return u'\u4E00' <= ch <= u'\u9FAF'
 
 def matchVocab(text):
     """[日,本,人] = matchVocab("さくらは日本人です。")
         """
-    vocabs = [ch for ch in text if isKanji(ch)]
-    return vocabs
+    #match = [ch for ch in text if isKanji(ch)]
+    match = []
+    vocab = "" 
+    for ch in text:
+        if isKanji(ch):
+            if vocab+ch in vocabs:
+                vocab = vocab+ch
+            else:
+                match.append(vocab)
+                vocab = ch
+        else: # Kana
+            if vocab != "":
+                match.append(vocab)
+                vocab = ""
+    return match
 
 def splitVocab(text, matches):
     """ [さくらは,",",です] = splitVocab("さくらは日本人です。", [日,本,人])
@@ -110,11 +132,12 @@ def splitVocab(text, matches):
     pos = 0
     for vocab in matches:
         pos = text.find(vocab)
-        split += [text[:pos]]
+        split.append(text[:pos])
         text = text[pos+len(vocab):]
     # Get tail.
-    split += [text]
+    split.append(text)
     return split
+
 ### End JS
 
 def WkDump(wkEntries):

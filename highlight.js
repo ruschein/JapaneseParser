@@ -45,16 +45,17 @@
 	// check if node has children with text
 	const textChildNodes = obj => Array.from(obj.childNodes).filter(node => node.nodeName === "#text");
     
-	// Generated
+	const vocabAssoc = {};
+	chrome.storage.local.get(["wkhighlight_vocab_assoc"], data => {
+		Object.assign(vocabAssoc, data["wkhighlight_vocab_assoc"]);
+	});
+	const kanjiAssoc = {};
+	chrome.storage.local.get(["wkhighlight_kanji_assoc"], data => {
+		Object.assign(kanjiAssoc, data["wkhighlight_kanji_assoc"]);
+	});
 
-	const vocabs = new Map();
-	vocabs.set('日', ['ひ', 'Sun']);
-	vocabs.set('日本', ['にほん', 'Japan']);
-	vocabs.set('食', ['た', 'Food']);
-	vocabs.set('食べる', ['たべる', 'To Eat']);
-	vocabs.set('人', ['ひと', 'Person']);
-	vocabs.set('私', ['わたし', 'I']);
-  
+// Generated
+
 function isKanji(ch) {
     return (("\u4e00" <= ch) && (ch <= "\u9faf"));
 }
@@ -98,7 +99,8 @@ function matchVocab(text) {
 			kanaHead = kanaTail; //kanaTail = "";
 	 	}
 	  }
-	  if (vocabs.has(vocab + ch)) {
+	  if (vocabAssoc[vocab+ch] || kanjiAssoc[vocab+ch]) {
+		//console.log("vocabAssoc("+vocab+ch+")='"+vocabAssoc[vocab + ch]+"'");
         vocab = vocab + ch;
       } else {
 		if (vocab != "") {
@@ -121,11 +123,12 @@ function matchVocab(text) {
 		//if (ch != '\n') console.log("ch='"+ch+"'");
 		kanaTail = kanaTail+ch;
 		//if (ch != '\n') console.log("kanaTail='"+kanaTail+"'");
-		if (ch == 'る') {
+		if ((ch == 'る') || (ch == 'ぶ')) {
 			// Verb ?
-			console.log("ru:"+vocab + kanaTail);
+			console.log("ru/bu:"+vocab + kanaTail);
 			if (vocab != "") {
-				if (vocabs.has(vocab + kanaTail)) {
+				if (vocabAssoc[vocab+kanaTail]) {
+					//console.log("vocabAssoc("+vocab+kanaTail+")='"+vocabAssoc[vocab + kanaTail]+"'");
 					vocab = vocab + kanaTail
 					match = match.concat([vocab]);
 					if (vocabRoot > kanaRoot) {

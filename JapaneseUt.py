@@ -10,6 +10,7 @@ import JapaneseEs
 
 mode = None
 
+
 dolly = ( # cd = Cure Dolly
     ("私がケーキを食べる。",
     "I eat cake",
