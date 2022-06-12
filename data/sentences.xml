@@ -1,0 +1,22 @@
+<sentences>
+  <sentence>
+    <original>私がケーキを食べる。</original>
+    <english>I eat cake.</english>
+    <parts>
+      <part type='pronoun'>私</part>
+      <part type='particle'>が</part>
+      <part type='noun'>ケーキ</part>
+      <part type='particle'>を</part>
+      <part type='verb'>食べる</part>
+    </parts>
+  </sentence>
+  <sentence>
+    <original>犬が食べる。</original>
+    <english>The dog will eat.</english>
+    <parts>
+      <part type='noun'>犬</part>
+      <part type='particle'>が</part>
+      <part type='verb'>食べる</part>
+    </parts>
+  </sentence>
+</sentences>

@@ -5,6 +5,9 @@ import sys
 
 LOGICAL_PARTICLES = ['が', 'を', 'へ', 'に', 'で']
 NONLOGICAL_PARTICLES = ['は', 'の']
+POSSIBLE_ADJECTIVE_ENDINGS = ['い']
+VERB_INFINITIVE_ENDINGS = ['う', 'く', 'す', 'つ', 'ぬ', 'ぶ', 'む', 'る']
+TE_ENDINGS = ['って', 'んで', 'いて', 'いで', 'して', 'て']
 
 
 def IsHiragana(CHAR) -> bool:
@@ -19,6 +22,39 @@ def IsKanji(CHAR) -> bool:
     return u'\u4E00' <= CHAR <= u'\u9FAF'
 
 
+# @return True if "reversed_word" is probably an adjective, else False.
+def IsProbablyAnAdjective(reversed_word: str) -> bool:
+    if not IsHiragana(reversed_word[0])::
+        return False
+
+    # Adjectives can *never* end in えい;
+    if len(reversed_word) > 1 and reversed_word[0:2] == 'いえ':
+        return False
+
+    # Past tense of adverbial adjective?
+    if len(reversed_word) > 3 and reversed_word[0:3] == 'たっか':
+        return True
+
+    # Negative adverb?
+    if len(reversed_word) > 3 and reversed_word[0:3] == 'いなく':
+        return True
+
+    # Negative past tense adverb?
+    if len(reversed_word) > 4 and reversed_word[0:4] == 'たかなく':
+        return True
+
+    return reversed_word[0] in POSSIBLE_ADJECTIVE_ENDINGS
+
+
+# @return the type of verb ending if it was one of the recognized endings, else None.
+def ClassifyVerbEnding(reversed_word: strd) -> str:
+    if len(reversed_word) > 1 and reversed_word[0:2] == 'すま':
+        return 'ます'
+    if len(reversed_word) > 2 and reversed_word[0:3] == 'んせま':
+        return 'ません'
+    return None
+    
+    
 # Attempts to extract a verb, adjective or noun from the reversed_sentence.
 # If successful, we return the shortened reversed_sentence and whatever we extracted
 # o/w we return the original reversed_sentence and False.
